@@ -36,17 +36,20 @@
 #pokemon_list, #pokemon_type{
     list-style: none;
     padding: 0;
-    margin: 0; 
+    margin: 0;
+    display: flex;
+    justify-content: center;
 }
 
 .pokemon_info{
     background-color: #ffffff;
     border-radius: 15px;
-    padding: 0 15px;
-    width: 250px;
-    height: 300px;
+    padding: 0 10px;
+    width: 270px;
+    height: 320px;
     text-align: center;
     margin: 20px auto;
+    margin-top: 100px;
 }
 
 .card {
@@ -54,10 +57,11 @@
     border-radius: 15px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     padding: 0 15px;
-    width: 280px;
-    height: 450px;
+    width: 300px;
+    height: 480px;
     text-align: center;
     margin: 20px auto;
+    position: relative;
 }
 
 #pokemon_title{
@@ -67,8 +71,10 @@
 
 #izena{
     color:white;
-    font-size: 20px;
+    font-size: 25px;
     font-weight: bold;
+    margin-bottom: 0;
+    margin-top: 15px;
 }
 
 #zenbakia{
@@ -81,18 +87,31 @@
 #pokemon_type{
     display: flex;
     justify-content: center;
+    padding-top: 65px;
+    color:white;
 }
 
 #pokemon_type li{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin: 5px;
     background-color: #d75f54;
     border-radius: 15px;
-    width: 60px;
+    width: 90px;
 }
 
 .pokemon_neurriak{
     display: flex;
     justify-content: center;
+}
+
+.pokemon_neurria{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .stat p{
@@ -103,4 +122,28 @@
     display: flex;
     justify-content: center;
     margin: 0;
+    align-items: center;
+}
+
+.barra {
+    width: 300px;
+    height: 8px;
+    background: #e5e5e5;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progreso {
+    height: 100%;
+    background: #000;
+    border-radius: 10px;
+}
+
+.pokemon_img{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 50px;
+    bottom: -60px;
+    z-index: 2;
 }
