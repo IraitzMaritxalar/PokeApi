@@ -54,7 +54,6 @@ header button:active {
 
 #content {
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
     text-align: center;

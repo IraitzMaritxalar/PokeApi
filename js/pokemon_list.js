@@ -10,11 +10,9 @@ export async function initPokemonList() {
         speed: "SPD"
     };
 
-    if (!pokemonListEl || !searchInput) return;
-
     let allPokemon = [];
 
-    async function fetchPokemonList(limit = 20) {
+    async function fetchPokemonList(limit) {
         const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}`);
         const data = await response.json();
         const results = data.results;
@@ -22,7 +20,14 @@ export async function initPokemonList() {
         const detailedPokemon = await Promise.all(
             results.map(async (poke) => {
                 const res = await fetch(poke.url);
-                return await res.json();
+                const pokemonData = await res.json();
+
+                const speciesRes = await fetch(pokemonData.species.url);
+                const speciesData = await speciesRes.json();
+
+                pokemonData.color = speciesData.color.name;
+
+                return pokemonData;
             })
         );
 
@@ -37,11 +42,13 @@ export async function initPokemonList() {
             const types = p.types.map(t => t.type.name);
             const weight = p.weight / 10;
             const height = p.height / 10;
+            const mainType = p.types[0].type.name;
+            console.log("kolorea: " + mainType);
 
             const li = document.createElement("li");
             li.className = "pokemon";
             li.innerHTML = `
-                <div class="card">
+                <div class="card ${mainType}">
                     <div class="pokemon_title">
                         <p class="izena">${capitalize(p.name)}</p>
                         <p class="zenbakia">#${p.id.toString().padStart(3,'0')}</p>
@@ -90,5 +97,5 @@ export async function initPokemonList() {
         renderPokemon(filtered);
     });
 
-    fetchPokemonList(20);
+    fetchPokemonList(70);
 }

@@ -10,10 +10,6 @@
 }
 
 .searchForm {
-    display: flex;
-    justify-content: center; 
-    align-items: center;
-    gap: 10px;
     margin-top: 20px;
 }
 
@@ -53,7 +49,6 @@
 }
 
 .card {
-    background-color: #d75f54;
     border-radius: 15px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     padding: 0 15px;
@@ -184,3 +179,18 @@
     padding-left: 40px; 
     height: 40px;
 }
+
+.card.grass { background-color: #78C850; }
+.card.fire { background-color: #F08030; }
+.card.water { background-color: #6890F0; }
+.card.electric { background-color: #F8D030; }
+.card.psychic { background-color: #F85888; }
+.card.ice { background-color: #98D8D8; }
+.card.dragon { background-color: #5913fd; }
+.card.dark { background-color: #705848; }
+.card.fairy { background-color: #EE99AC; }
+.card.normal { background-color: #A8A878; }
+.card.bug{ background-color:#4c6141;}
+.card.poison{ background-color: #402385;}
+.card.ground{ background-color: #67391a;}
+.card.fighting{ background-color: rgb(109, 0, 0);}
