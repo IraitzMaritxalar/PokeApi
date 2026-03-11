@@ -3,7 +3,7 @@ let currentCss;
 function loadPage(page) {
   fetch(`../html/${page}`)
     .then(res => res.text())
-    .then(html => {
+    .then(async html => {
       document.getElementById("content").innerHTML = html;
 
       if(currentCss) currentCss.remove();
@@ -18,6 +18,10 @@ function loadPage(page) {
           currentCss = link;
         }
       });
+      if(page === "pokemon_list.html") {
+        const module = await import("../js/pokemon_list.js");
+        module.initPokemonList();
+      }
     });
 }
 

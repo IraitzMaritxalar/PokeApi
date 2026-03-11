@@ -1,8 +1,25 @@
+.home{
+    width: 100%;
+    min-height: 100vh;
+    background-image: url('../img/Pikachu_Wallpaper.jpg'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+        flex-direction: column;
+}
+
 #content img {
     width: 600px;
     height: 200px;
+    z-index: 1;
 }
 
 #content h4 {
     font-size: 40px;
+    color: white;
+    z-index: 1;
+    margin: 0;
 }
