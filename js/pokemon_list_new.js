@@ -1,10 +1,4 @@
 import { loadPage } from "./main.js";
-import p1 from "../json/1.json" with { type: "json" };
-import p2 from "../json/2.json" with { type: "json" };
-import p3 from "../json/3.json" with { type: "json" };
-import p4 from "../json/4.json" with { type: "json" };
-import p5 from "../json/5.json" with { type: "json" };
-import p6 from "../json/6.json" with { type: "json" };
 
 export async function initPokemonList() {
     const pokemonListEl = document.getElementById("pokemonList");
@@ -18,8 +12,30 @@ export async function initPokemonList() {
         speed: "SPD"
     };
 
-    let allPokemon = [p1, p2, p3, p4, p5, p6];
-    renderPokemon(allPokemon);
+    let allPokemon = [];
+
+    async function fetchPokemonList(limit) {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}`);
+        const data = await response.json();
+        const results = data.results;
+
+        const detailedPokemon = await Promise.all(
+            results.map(async (poke) => {
+                const res = await fetch(poke.url);
+                const pokemonData = await res.json();
+
+                const speciesRes = await fetch(pokemonData.species.url);
+                const speciesData = await speciesRes.json();
+
+                pokemonData.color = speciesData.color.name;
+
+                return pokemonData;
+            })
+        );
+
+        allPokemon = detailedPokemon;
+        renderPokemon(allPokemon);
+    }
 
     function renderPokemon(pokemons) {
         pokemonListEl.innerHTML = "";
@@ -83,4 +99,6 @@ export async function initPokemonList() {
         );
         renderPokemon(filtered);
     });
+
+    fetchPokemonList(70);
 }

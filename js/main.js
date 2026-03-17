@@ -1,16 +1,21 @@
 let currentCss;
 
-function loadPage(page) {
-  fetch(`../html/${page}`)
+export function loadPage(page) {
+
+  const [file, query] = page.split("?");
+
+  fetch(`../html/${file}`)
     .then(res => res.text())
     .then(async html => {
+
       document.getElementById("content").innerHTML = html;
 
       if(currentCss) currentCss.remove();
 
-      const cssPath = `../css/${page.replace(".html", ".css")}`;
+      const cssPath = `../css/${file.replace(".html", ".css")}`;
+
       fetch(cssPath).then(res => {
-        if(res.ok) {
+        if(res.ok){
           const link = document.createElement("link");
           link.rel = "stylesheet";
           link.href = cssPath;
@@ -18,10 +23,17 @@ function loadPage(page) {
           currentCss = link;
         }
       });
-      if(page === "pokemon_list.html") {
+
+      if(file === "pokemon_list.html"){
         const module = await import("../js/pokemon_list.js");
         module.initPokemonList();
       }
+
+      if(file === "pokemon_detail.html"){
+        const module = await import("../js/pokemon_detail.js");
+        module.initPokemonDetail(query);
+      }
+
     });
 }
 

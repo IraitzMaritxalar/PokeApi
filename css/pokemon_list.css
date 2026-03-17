@@ -1,7 +1,7 @@
 .sr-only {
     position: absolute;
-    width: 1px;
-    height: 1px;
+    width: 0.06rem;
+    height: 0.06rem;
     padding: 0;
     overflow: hidden;
     clip: rect(0,0,0,0);
@@ -10,17 +10,17 @@
 }
 
 .searchForm {
-    margin-top: 20px;
+    margin-top: 1.25rem;
+    width: 100%;
 }
 
 .pokemonSearch {
-    padding: 8px 16px;
-    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
     border: 1px solid #9c9c9c;
     background-color:#e2e2e2;
-    font-size: 14px;
-    width: 600px;
-    height: 30px;
+    font-size: 0.9rem;
+    width: min(90%, 25rem);
     transition: border-color 0.3s;
 }
 
@@ -37,26 +37,26 @@
     justify-content: center;
 }
 
-.pokemon_info{
-    background-color: #ffffff;
-    border-radius: 15px;
-    padding: 0 10px;
-    width: 270px;
-    height: 320px;
+.card {
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1.2rem rgba(0,0,0,0.2);
+    padding: 0 1rem;
+    width: 95%;
+    max-width: 26rem;
+    height: 30rem;
     text-align: center;
-    margin: 20px auto;
-    margin-top: 95px;
+    margin: 1.25rem auto;
+    position: relative;
 }
 
-.card {
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    padding: 0 15px;
-    width: 300px;
-    height: 480px;
+.pokemon_info{
+    background-color: #ffffff;
+    border-radius: 1rem;
+    padding: 0 0.6rem;
+    height: 20rem;
     text-align: center;
-    margin: 20px auto;
-    position: relative;
+    margin: 1.25rem auto;
+    margin-top: 6rem;
 }
 
 .pokemon_title{
@@ -66,37 +66,34 @@
 
 .izena{
     color:white;
-    font-size: 25px;
+    font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 0;
-    margin-top: 15px;
+    margin-top: 0.9rem;
 }
 
 .zenbakia{
     padding: 0;
     color:rgb(180, 180, 180);
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: bold;
 }
 
 .pokemon_type{
-    display: flex;
     justify-content: center;
-    padding-top: 70px;
+    padding-top: 4.3rem;
     color:white;
-    font-size: 13px;
+    font-size: 0.8rem;
 }
 
 .pokemon_type li{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 5px;
+    margin: 0.3rem;
     background-color: #d75f54;
-    border-radius: 15px;
-    padding: 2px;
-    padding-left: 16px;
-    padding-right: 16px;
+    border-radius: 1rem;
+    padding: 0.15rem 1rem;
 }
 
 .pokemon_neurriak{
@@ -108,55 +105,49 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 0 1rem;
 }
 
 .stat p{
-    margin: 4px;
+    margin: 0.25rem;
 }
 
 .stat{
     display: flex;
     justify-content: center;
-    margin: 0;
     align-items: center;
 }
 
 .barra {
-    width: 300px;
-    height: 8px;
+    width: 18rem;
+    height: 0.5rem;
     background: #e5e5e5;
-    border-radius: 10px;
+    border-radius: 0.6rem;
     overflow: hidden;
 }
 
 .progreso {
     height: 100%;
     background: #000;
-    border-radius: 10px;
+    border-radius: 0.6rem;
 }
 
 .pokemon_img{
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: 50px;
-    bottom: -60px;
+    top: 3rem;
+    bottom: -3.5rem;
     z-index: 2;
-}
-
-.pokemon{
-    margin: 0;
 }
 
 .pokemon_list{
     list-style: none;
     padding: 0;
-    margin: 40px 0;
+    margin: 2.5rem 0;
     display: grid;
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 40px;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
     justify-items: center;
 }
 
@@ -167,17 +158,29 @@
 
 .inputWrapper .icon {
     position: absolute;
-    left: 10px;
+    left: 0.6rem;
     top: 50%;
     transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
+    width: 1.2rem;
+    height: 1.2rem;
     pointer-events: none; 
 }
 
 .inputWrapper .pokemonSearch {
-    padding-left: 40px; 
-    height: 40px;
+    padding-left: 2.5rem; 
+    height: 2.5rem;
+}
+
+@media (min-width: 64rem) {
+
+    .pokemon_list{
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .card{
+        width: 18rem;
+    }
+
 }
 
 .card.grass { background-color: #78C850; }
@@ -194,3 +197,8 @@
 .card.poison{ background-color: #402385;}
 .card.ground{ background-color: #67391a;}
 .card.fighting{ background-color: rgb(109, 0, 0);}
+
+.pokemon_detail_container ul{
+    list-style: none;
+
+}

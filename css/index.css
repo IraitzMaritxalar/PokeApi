@@ -3,54 +3,56 @@ body{
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    padding-top: 3.75rem;
 }
 
 header {
-    position: relative;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
     display: flex;
     align-items: center;
-    padding: 5px 200px;
-    height: 60px;
+    padding: 0.3rem 6rem;
+    height: 3.75rem;
     background-color: #fff;
-    box-shadow: 0 4px 6px -2px rgba(0,0,0,0.1);
-    z-index: 1000;
+    box-shadow: 0 0.25rem 0.375rem -0.125rem rgba(0,0,0,0.1);
 }
 
 .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 0.6rem;
 }
 
 .buttons {
     position: absolute;
-    left: 50%;
+    left: 45%;
     transform: translateX(-50%);
     display: flex;
-    gap: 80px;
+    gap: 5rem;
 }
 
 header button {
     background-color: #e0e0e0;
     border: none;   
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-size: 15px;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s; 
-    height: 35px;
-    width: 130px;
+    height: 2.2rem;
+    width: 8rem;
 }
 
 header button:hover {
     background-color: #d5d5d5;
-    transform: translateY(-2px);
+    transform: translateY(-0.15rem);
 }
 
 header button:active {
     transform: translateY(0);
 }
-
 
 #content {
     display: flex;
@@ -58,21 +60,19 @@ header button:active {
     flex-direction: column;
     text-align: center;
     flex: 1;
-    margin: 0;
-    height: 100%;
     width: 100%;
-    padding-bottom: 40px;
+    padding-bottom: 2.5rem;
 }
 
 h1{
-    font-size: 25px;
+    font-size: 1.5rem;
 }
 
 footer{
     background-color: black;
     color: white;
     text-align: center;
-    padding: 10px;
+    padding: 0.6rem;
     position: fixed;
     left: 0;
     bottom: 0;

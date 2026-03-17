@@ -1,0 +1,28 @@
+.pokemon_detail_container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:85vh;
+}
+
+#pokemonDetail{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.card.detail{
+    width:50rem;
+    max-width:90vw;
+    height:40rem;
+}
+
+.card.detail .pokemon_info{
+    height:26rem;
+}
+
+.card.detail .pokemon_img{
+    width:200px;
+    height:230px;
+    top:4rem;
+}
