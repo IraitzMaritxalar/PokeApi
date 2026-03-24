@@ -25,7 +25,7 @@ export function loadPage(page) {
       });
 
       if(file === "pokemon_list.html"){
-        const module = await import("../js/pokemon_list.js");
+        const module = await import("./pokemon_list.js");
         module.initPokemonList();
       }
 

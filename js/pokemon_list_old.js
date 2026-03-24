@@ -1,4 +1,10 @@
 import { loadPage } from "./main.js";
+import p1 from "../json/1.json" with { type: "json" };
+import p2 from "../json/2.json" with { type: "json" };
+import p3 from "../json/3.json" with { type: "json" };
+import p4 from "../json/4.json" with { type: "json" };
+import p5 from "../json/5.json" with { type: "json" };
+import p6 from "../json/6.json" with { type: "json" };
 
 export async function initPokemonList() {
     const pokemonListEl = document.getElementById("pokemonList");
@@ -12,34 +18,11 @@ export async function initPokemonList() {
         speed: "SPD"
     };
 
-    let allPokemon = [];
-
-    async function fetchPokemonList(limit) {
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}`);
-        const data = await response.json();
-        const results = data.results;
-
-        const detailedPokemon = await Promise.all(
-            results.map(async (poke) => {
-                const res = await fetch(poke.url);
-                const pokemonData = await res.json();
-
-                const speciesRes = await fetch(pokemonData.species.url);
-                const speciesData = await speciesRes.json();
-
-                pokemonData.color = speciesData.color.name;
-
-                return pokemonData;
-            })
-        );
-
-        allPokemon = detailedPokemon;
-        renderPokemon(allPokemon);
-    }
+    let allPokemon = [p1, p2, p3, p4, p5, p6];
+    renderPokemon(allPokemon);
 
     function renderPokemon(pokemons) {
         pokemonListEl.innerHTML = "";
-
         pokemons.forEach(p => {
             const types = p.types.map(t => t.type.name);
             const weight = p.weight / 10;
@@ -59,7 +42,7 @@ export async function initPokemonList() {
                     <img src="${p.sprites.front_default}" alt="${p.name}" width="140" height="170" class="pokemon_img">
                     <div class="pokemon_info">
                         <ul class="pokemon_type">
-                            ${types.map(type => `<li>${capitalize(type)}</li>`).join('')}
+                            ${types.map(type => `<li class="pokemon_type ${type}">${capitalize(type)}</li>`).join('')}
                         </ul>
                         <div class="pokemon_neurriak">
                             <div class="pokemon_neurria">
@@ -99,6 +82,4 @@ export async function initPokemonList() {
         );
         renderPokemon(filtered);
     });
-
-    fetchPokemonList(70);
 }
