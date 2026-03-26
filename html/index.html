@@ -2,6 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/home.css">
     <title>Home</title>
 </head>
 
@@ -12,16 +13,23 @@
         <h1>Pokédex</h1>
     </div>
     <div class="buttons">
-        <button id="homeBtn">Home</button>
-        <button id="pokemonBtn">Pokemon List</button>
+        <a href="../html/index.html">
+            <button id="homeBtn">Home</button>
+        </a>
+
+        <a href="../html/pokemon_list.html">
+            <button id="pokemonBtn">Pokemon List</button>
+        </a>
     </div>
     </header>
 
-    <div id="content"></div>
-    
+    <div class="home">
+        <img src="../img/pokemon_logo2.png" alt="Logo de pokemon">
+        <h4>All the information about all the Pokémons</h4>
+    </div>
+
     <footer>
         <p>2024 Pokémon. 1995 - 2024 Nintendo/Creatures Inc./GAME FREAK inc. TM, Nintendo.</p>
     </footer>
-    <script type="module" src="../js/main.js"></script>
 </body>
 </html>

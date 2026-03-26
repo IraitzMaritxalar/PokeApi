@@ -11,13 +11,13 @@
     flex-direction: column;
 }
 
-#content img {
+.home img {
     width: 600px;
     height: 200px;
     z-index: 1;
 }
 
-#content h4 {
+.home h4 {
     font-size: 40px;
     color: white;
     z-index: 1;

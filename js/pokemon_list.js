@@ -1,9 +1,9 @@
-import { loadPage } from "./main.js";
-
 export async function initPokemonList() {
     const pokemonListEl = document.getElementById("pokemonList");
     const loader = document.getElementById("loader");
     const searchInput = document.querySelector(".pokemonSearch");
+    const errorEl = document.getElementById("error");
+    const noPokemonEl = document.getElementById("no-pokemon");
     const statMap = {
         hp: "HP",
         attack: "ATK",
@@ -15,31 +15,42 @@ export async function initPokemonList() {
 
     let allPokemon = [];
 
-    async function fetchPokemonList(limit) {
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}`);
-        const data = await response.json();
-        const results = data.results;
+async function fetchPokemonList(limit) {
+    try {   
+            showLoader();
+            const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}`);
+            const data = await response.json();
 
-        const detailedPokemon = await Promise.all(
-            results.map(async (poke) => {
-                const res = await fetch(poke.url);
-                const pokemonData = await res.json();
+            const results = data.results;
 
-                const speciesRes = await fetch(pokemonData.species.url);
-                const speciesData = await speciesRes.json();
+            const detailedPokemon = await Promise.all(
+                results.map(async (poke) => {
+                    const res = await fetch(poke.url);
+                    const pokemonData = await res.json();
 
-                pokemonData.color = speciesData.color.name;
+                    const speciesRes = await fetch(pokemonData.species.url);
+                    const speciesData = await speciesRes.json();
 
-                return pokemonData;
-            })
-        );
+                    pokemonData.color = speciesData.color.name;
 
-        allPokemon = detailedPokemon;
-        loader.style.display = "grid";
-        setTimeout(() => {
-            loader.style.display = "none";
-            renderPokemon(allPokemon);
-        }, 2000);
+                    return pokemonData;
+                })
+            );
+
+            allPokemon = detailedPokemon;
+
+            loader.style.display = "grid";
+
+            setTimeout(() => {
+                loader.style.display = "none";
+                showPokemonList();
+                renderPokemon(allPokemon);
+            }, 2000);
+
+        } catch (error) {
+            console.error(error);
+            showError();
+        }
     }
 
     function renderPokemon(pokemons) {
@@ -50,12 +61,13 @@ export async function initPokemonList() {
             const weight = p.weight / 10;
             const height = p.height / 10;
             const mainType = p.types[0].type.name;
+
             const li = document.createElement("li");
             li.className = "pokemon";
-            li.addEventListener("click", () => {
-                loadPage(`pokemon_detail.html?id=${p.id}`);
-            });
-            li.innerHTML = `
+
+            const a = document.createElement("a");
+            a.href = `pokemon_detail.html?id=${p.id}`;
+            a.innerHTML = `
                 <div class="card ${mainType}">
                     <div class="pokemon_title">
                         <p class="izena">${capitalize(p.name)}</p>
@@ -90,6 +102,8 @@ export async function initPokemonList() {
                     </div>
                 </div>
             `;
+
+            li.appendChild(a);
             pokemonListEl.appendChild(li);
         });
     }
@@ -102,8 +116,42 @@ export async function initPokemonList() {
         const filtered = allPokemon.filter(p =>
             p.name.toLowerCase().includes(e.target.value.toLowerCase())
         );
-        renderPokemon(filtered);
+
+        if (filtered.length === 0) {
+            showNoPokemon();
+        } else {
+            showPokemonList();
+            renderPokemon(filtered);
+        }
     });
+
+    function showError() {
+        errorEl.style.display = "flex";
+        noPokemonEl.style.display = "none";
+        pokemonListEl.style.display = "none";
+        loader.style.display = "none";
+    }
+
+    function showNoPokemon() {
+        errorEl.style.display = "none";
+        noPokemonEl.style.display = "flex";
+        pokemonListEl.style.display = "none";
+    }
+
+    function showPokemonList() {
+        errorEl.style.display = "none";
+        noPokemonEl.style.display = "none";
+        pokemonListEl.style.display = "grid";
+    }
+
+    function showLoader() {
+        loader.style.display = "grid";
+        pokemonListEl.style.display = "none";
+        errorEl.style.display = "none";
+        noPokemonEl.style.display = "none";
+    }
 
     fetchPokemonList(70);
 }
+
+initPokemonList();

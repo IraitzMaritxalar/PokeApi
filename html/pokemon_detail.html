@@ -1,15 +1,34 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Pokemon</title>
-<link rel="stylesheet" href="../css/pokemon_list.css">
+    <link rel="stylesheet" href="../css/pokemon_detail.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <title>Home</title>
 </head>
 <body>
+    <header>
+    <div class="logo">
+        <img src="../img/pokemon_logo.png" alt="Logo de pokemon" width="40" height="40">
+        <h1>Pokédex</h1>
+    </div>
+    <div class="buttons">
+        <a href="../html/index.html">
+            <button id="homeBtn">Home</button>
+        </a>
 
-<div class="pokemon_detail_container">
-    <ul id="pokemonDetail"></ul>
-</div>
+        <a href="../html/pokemon_list.html">
+            <button id="pokemonBtn">Pokemon List</button>
+        </a>
+    </div>
+    </header>
 
+    <div class="pokemon_detail_container">
+        <ul id="pokemonDetail"></ul>
+    </div>
+    <script type="module" src="../js/pokemon_detail.js"></script>
+
+    <footer>
+        <p>2024 Pokémon. 1995 - 2024 Nintendo/Creatures Inc./GAME FREAK inc. TM, Nintendo.</p>
+    </footer>
 </body>
 </html>
