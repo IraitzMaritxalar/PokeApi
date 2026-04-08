@@ -12,21 +12,22 @@
 .searchForm {
     margin: 1.5rem auto;
     width: 100%;
-    max-width: 25rem;
+    max-width: 40rem;
     display: flex;
-    justify-content: center; 
+    justify-content: center;
 }
 
 .pokemonSearch {
-    padding: 0.5rem 1rem;
+    width: 100%;
+    padding-left: 2.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
     border-radius: 0.5rem;
     border: 1px solid #9c9c9c;
     background-color: #e2e2e2;
     font-size: 0.9rem;
-    width: min(90%, 25rem);
     transition: border-color 0.3s;
 }
-
 .pokemonSearch:focus {
     border-color: #888;
     outline: none;
@@ -34,7 +35,8 @@
 
 .inputWrapper {
     position: relative;
-    display: inline-block;
+    display: flex;
+    width: 100%;
 }
 
 .inputWrapper .icon {
@@ -261,4 +263,29 @@
 #error a, #no-pokemon a {
     font-size: 18px;
     color: #333;
+}
+
+.favorite_star {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    font-size: 1.8rem;
+    color: transparent; 
+    -webkit-text-stroke: 1px gray;
+    text-shadow: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+    z-index: 3;
+    transition: color 0.3s, -webkit-text-stroke-color 0.3s;
+}
+
+.favorite_star.selected {
+    color: rgb(255, 255, 255);
+    -webkit-text-stroke: 0px; 
+}
+
+.favorite_star:hover {
+    color: rgb(255, 255, 255);
+    -webkit-text-stroke: 0px;
 }
