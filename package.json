@@ -5,12 +5,14 @@
   "private": true,
   "devDependencies": {
     "@types/bun": "latest",
-    "live-server": "^1.2.2"
+    "concurrently": "^9.2.1",
+    "live-server": "^1.2.2",
+    "typescript": "^6.0.2"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "scripts": {
-    "dev": "bunx live-server --port=3000 --entry-file=html/index.html"
+    "dev": "concurrently \"bun tsc --watch\" \"bunx live-server --port=3000 --entry-file=html/index.html\""
   }
 }
