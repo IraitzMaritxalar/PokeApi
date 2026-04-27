@@ -5,6 +5,7 @@ interface Pokemon {
 }
 
 function initDreamTeam(): void {
+
   const emptyState = document.getElementById('empty-state') as HTMLDivElement;
   const filledState = document.getElementById('filled-state') as HTMLDivElement;
   const frame = document.getElementById('pokemon-frame') as HTMLDivElement;
@@ -14,6 +15,7 @@ function initDreamTeam(): void {
     try {
       const stored = localStorage.getItem('dreamTeam');
       if (!stored) return [];
+
       const parsed: unknown = JSON.parse(stored);
       return Array.isArray(parsed) ? parsed as Pokemon[] : [];
     } catch {
@@ -22,43 +24,41 @@ function initDreamTeam(): void {
     }
   }
 
-  function setFrameSize(count: number): void {
-    frame.className = 'white-frame';
-    if (count === 1) frame.classList.add('size-1');
-    else if (count === 2) frame.classList.add('size-2');
-    else if (count === 3) frame.classList.add('size-3');
-    else if (count === 4) frame.classList.add('size-4');
-    else if (count === 5) frame.classList.add('size-5');
-    else frame.classList.add('size-6');
-  }
-
   function render(pokemons: Pokemon[]): void {
+
     if (pokemons.length === 0) {
       emptyState.classList.remove('hidden');
       filledState.classList.add('hidden');
       return;
     }
-    
+
     emptyState.classList.add('hidden');
     filledState.classList.remove('hidden');
-    
-    setFrameSize(pokemons.length);
-    frame.innerHTML = '';
-    
-    // Render only existing Pokémon (no empty slots!)
-    pokemons.slice(0, 6).forEach((pokemon: Pokemon) => {
-      if (pokemon.sprites?.front_default) {
-        const slot: HTMLDivElement = document.createElement('div');
-        slot.className = 'pokemon-slot';
-        
-        const img: HTMLImageElement = document.createElement('img');
-        img.src = pokemon.sprites.front_default;
-        img.alt = pokemon.name;
-        img.loading = 'lazy';
-        
-        slot.appendChild(img);
-        frame.appendChild(slot);
-      }
+
+    const teamContainer = document.getElementById("team-pokemon") as HTMLDivElement;
+    const iconContainer = document.getElementById("team-icons") as HTMLDivElement;
+
+    teamContainer.innerHTML = "";
+    iconContainer.innerHTML = "";
+
+    pokemons.slice(0, 6).forEach((pokemon: Pokemon, index: number) => {
+
+      if (!pokemon.sprites?.front_default) return;
+
+      const img = document.createElement("img");
+      img.src = pokemon.sprites.front_default;
+      img.alt = pokemon.name;
+      img.loading = "lazy";
+      img.className = `team-pokemon-img pos-${index}`;
+
+      teamContainer.appendChild(img);
+
+      const icon = document.createElement("img");
+      icon.src = pokemon.sprites.front_default;
+      icon.alt = pokemon.name;
+      icon.className = "team-icon";
+
+      iconContainer.appendChild(icon);
     });
   }
 

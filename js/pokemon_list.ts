@@ -63,7 +63,7 @@ export async function initPokemonList(): Promise<void> {
     return stored ? JSON.parse(stored) as Pokemon[] : [];
   }
 
-  function toggleDreamTeam(pokemon: Pokemon): void {
+  function createDreamTeam(pokemon: Pokemon): void {
     const dreamTeam = getDreamTeam();
     const isInTeam = dreamTeam.some(p => p.id === pokemon.id);
     
@@ -196,7 +196,7 @@ export async function initPokemonList(): Promise<void> {
       const star: HTMLButtonElement | null = li.querySelector(".favorite_star");
       if (star) {
         star.addEventListener("click", (e: MouseEvent) => {
-          toggleDreamTeam(p);
+          createDreamTeam(p);
           
           const isNowInTeam = !isInDreamTeamLocal;
           star.classList.toggle("selected", isNowInTeam);

@@ -23,21 +23,6 @@ body {
   letter-spacing: 2px;
 }
 
-.white-frame {
-  border: 12px solid white;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-  margin: 0 auto 3rem;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3rem;
-  padding: 3rem 2rem;
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 .white-frame.size-1 { width: 200px; height: 260px; padding: 2rem 1.5rem; }
 .white-frame.size-2 { width: 380px; height: 260px; padding: 2rem 2rem; }
 .white-frame.size-3 { width: 560px; height: 260px; padding: 2rem 2.5rem; }
@@ -98,4 +83,107 @@ body {
 
 .hidden {
   display: none !important;
+}
+
+.white-frame {
+  border: 6px solid white;
+  border-radius: 24px;
+  background: white;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  margin: 0 auto 3rem;
+  position: relative;
+
+  overflow: visible; /* antes hidden */
+}
+/* escenario del equipo */
+.team-stage {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  background: linear-gradient(135deg,#f4d6c8,#cfd5ff);
+  border-radius: 18px;   /* nuevo */
+}
+
+/* contenedor pokemon */
+#team-pokemon {
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+  height: 100%;
+}
+
+/* pokemon grandes */
+.team-pokemon-img {
+  position: absolute;
+  bottom: 0;
+  height: 220px;
+  object-fit: contain;
+  transition: transform .3s;
+}
+
+#team-icons {
+  position: absolute;
+  bottom: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background: white;
+  padding: 8px 18px;
+  border-radius: 14px;
+
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+.team-icon{
+  width:40px;
+  height:40px;
+  image-rendering: pixelated;
+}
+
+#team-pokemon {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: -20px;
+}
+
+/* sprites principales */
+.team-pokemon-img {
+  position: absolute;
+  bottom: 0;
+  height: 200px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  transition: transform .25s;
+}
+
+/* tamaños para dar sensación de evolución */
+.pos-0 { transform: translateX(-300px); height:120px; z-index:1; }
+.pos-1 { transform: translateX(-180px); height:220px; z-index:2; }
+.pos-2 { transform: translateX(-60px);  height:150px; z-index:3; }
+.pos-3 { transform: translateX(60px);   height:170px; z-index:3; }
+.pos-4 { transform: translateX(180px);  height:240px; z-index:2; }
+.pos-5 { transform: translateX(300px);  height:260px; z-index:1; }
+
+.frame-title{
+  position: absolute;
+  top: -14px;   /* sobresale del borde */
+  left: 50%;
+  transform: translateX(-50%);
+  
+  background: white;
+  padding: 6px 22px;
+  border-radius: 12px;
+
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  z-index: 20;
 }
