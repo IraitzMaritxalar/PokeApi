@@ -56,9 +56,6 @@ export async function initPokemonDetail(query: string): Promise<void> {
   const speciesRes = await fetch(p.species.url);
   const speciesData: PokemonSpecies = await speciesRes.json();
 
-  // opcional si quieres usar color luego
-  p.color = speciesData.color.name;
-
   const types: string[] = p.types.map((t: PokemonType) => t.type.name);
   const weight: number = p.weight / 10;
   const height: number = p.height / 10;

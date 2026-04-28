@@ -1,43 +1,35 @@
+const MAX_TEAM_SIZE = 6;
+const MAX_STAT_VALUE = 100;
+const LOADER_DELAY = 2000;
+const POKEMON_LIMIT = 70;
+
 interface PokemonSpecies {
-  color: {
-    name: string;
-  };
+  color: { name: string };
 }
 
 interface PokemonStat {
   base_stat: number;
-  stat: {
-    name: string;
-  };
+  stat: { name: string };
 }
 
 interface PokemonType {
-  type: {
-    name: string;
-  };
+  type: { name: string };
 }
 
 interface Pokemon {
   id: number;
   name: string;
-  sprites: {
-    front_default: string;
-  };
+  sprites: { front_default: string };
   types: PokemonType[];
   weight: number;
   height: number;
   stats: PokemonStat[];
-  species: {
-    url: string;
-  };
+  species: { url: string };
   color?: string;
 }
 
 interface PokemonListResponse {
-  results: Array<{
-    name: string;
-    url: string;
-  }>;
+  results: Array<{ name: string; url: string }>;
 }
 
 const statMap: Record<string, string> = {
@@ -59,128 +51,105 @@ export async function initPokemonList(): Promise<void> {
   let allPokemon: Pokemon[] = [];
 
   function getDreamTeam(): Pokemon[] {
-    const stored = localStorage.getItem('dreamTeam');
-    return stored ? JSON.parse(stored) as Pokemon[] : [];
+    const stored = localStorage.getItem("dreamTeam");
+    return stored ? JSON.parse(stored) : [];
   }
 
-  function createDreamTeam(pokemon: Pokemon): void {
-    const dreamTeam = getDreamTeam();
-    const isInTeam = dreamTeam.some(p => p.id === pokemon.id);
-    
-    let updatedTeam: Pokemon[];
-    
-    if (isInTeam) {
-      updatedTeam = dreamTeam.filter(p => p.id !== pokemon.id);
-    } else {
-      if (dreamTeam.length >= 6) {
-        alert("Dream Team is full! (Max 6 Pokémon)");
-        return;
-      }
-      updatedTeam = [...dreamTeam, pokemon];
+  function toggleDreamTeam(pokemon: Pokemon): void {
+    const team = getDreamTeam();
+    const exists = team.some(p => p.id === pokemon.id);
+
+    if (!exists && team.length >= MAX_TEAM_SIZE) {
+      alert("Dream Team is full! (Max 6 Pokémon)");
+      return;
     }
-    
-    localStorage.setItem('dreamTeam', JSON.stringify(updatedTeam));
+
+    const updated = exists
+      ? team.filter(p => p.id !== pokemon.id)
+      : [...team, pokemon];
+
+    localStorage.setItem("dreamTeam", JSON.stringify(updated));
   }
 
-  function isPokemonInDreamTeam(pokemonId: number): boolean {
-    const dreamTeam = getDreamTeam();
-    return dreamTeam.some(p => p.id === pokemonId);
+  function isInDreamTeam(id: number): boolean {
+    return getDreamTeam().some(p => p.id === id);
   }
 
-  async function fetchPokemonList(limit: number): Promise<void> {
-    try {
-      showLoader();
-      
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data: PokemonListResponse = await response.json();
-      const results = data.results;
+  async function fetchPokemonList(limit: number): Promise<Pokemon[]> {
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}`);
+    if (!res.ok) throw new Error();
 
-      const detailedPokemon: Pokemon[] = await Promise.all(
-        results.map(async (poke): Promise<Pokemon> => {
-          const res = await fetch(poke.url);
-          const pokemonData: Pokemon = await res.json();
+    const data: PokemonListResponse = await res.json();
 
-          const speciesRes = await fetch(pokemonData.species.url);
-          const speciesData: PokemonSpecies = await speciesRes.json();
+    return Promise.all(
+      data.results.map(async (poke): Promise<Pokemon> => {
+        const res = await fetch(poke.url);
+        const pokemon: Pokemon = await res.json();
 
-          (pokemonData as Pokemon & { color: string }).color = speciesData.color.name;
+        const speciesRes = await fetch(pokemon.species.url);
+        const species: PokemonSpecies = await speciesRes.json();
 
-          return pokemonData;
-        })
-      );
+        pokemon.color = species.color.name;
 
-      allPokemon = detailedPokemon;
-      loader.style.display = "grid";
-
-      setTimeout(() => {
-        loader.style.display = "none";
-        showPokemonList();
-        renderPokemon(allPokemon);
-      }, 2000);
-
-    } catch (error) {
-      console.error("Error fetching Pokémon:", error);
-      showError();
-    }
+        return pokemon;
+      })
+    );
   }
 
   function renderPokemon(pokemons: Pokemon[]): void {
     pokemonListEl.innerHTML = "";
 
-    pokemons.forEach((p: Pokemon) => {
-      const types: string[] = p.types.map(t => t.type.name);
-      const weight: number = p.weight / 10;
-      const height: number = p.height / 10;
-      const mainType: string = p.types[0]?.type.name || '';
-      const isInDreamTeamLocal = isPokemonInDreamTeam(p.id);
+    pokemons.forEach((pokemon) => {
+      const types = pokemon.types.map(t => t.type.name);
+      const weight = pokemon.weight / 10;
+      const height = pokemon.height / 10;
+      const mainType = pokemon.types[0]?.type.name || "";
+      const isFav = isInDreamTeam(pokemon.id);
 
-      const li: HTMLLIElement = document.createElement("li");
+      const li = document.createElement("li");
       li.className = "pokemon";
 
-      const a: HTMLAnchorElement = document.createElement("a");
+      const a = document.createElement("a");
+
       a.innerHTML = `
         <div class="card ${mainType}">
             <div class="pokemon_title">
-                <p class="izena">${capitalize(p.name)}</p>
-                <p class="zenbakia">#${p.id.toString().padStart(3, '0')}</p>
+                <p class="izena">${capitalize(pokemon.name)}</p>
+                <p class="zenbakia">#${pokemon.id.toString().padStart(3, '0')}</p>
             </div>
 
-            <img src="${p.sprites.front_default}" alt="${p.name}" width="140" height="170" class="pokemon_img">
+            <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}" width="140" height="170" class="pokemon_img">
 
             <div class="pokemon_info">
-                <button class="favorite_star ${isInDreamTeamLocal ? 'selected' : ''}" 
-                        type="button" 
-                        aria-label="${isInDreamTeamLocal ? 'Remove from' : 'Add to'} Dream Team"
-                        title="${isInDreamTeamLocal ? 'Remove from Dream Team' : 'Add to Dream Team'}">
+                <button class="favorite_star ${isFav ? 'selected' : ''}" 
+                        type="button">
                     ★
                 </button>
-                <ul class="pokemon_type" role="list">
-                    ${types.map(type => `<li class="pokemon_type ${type}" role="listitem">${capitalize(type)}</li>`).join('')}
+
+                <ul class="pokemon_type">
+                    ${types.map(type => `<li class="pokemon_type ${type}">${capitalize(type)}</li>`).join('')}
                 </ul>
+
                 <div class="pokemon_neurriak">
                     <div class="pokemon_neurria">
-                        <img src="../img/bascula2.png" alt="Logo de una bascula" width="30" height="30">
-                        <p class="pixua">${weight.toFixed(1)}kg</p>
+                        <img src="../img/bascula2.png" width="30">
+                        <p>${weight.toFixed(1)}kg</p>
                     </div>
                     <div class="pokemon_neurria">
-                        <img src="../img/regla2.png" alt="Logo de una regla" width="30" height="20">
-                        <p class="altura">${height.toFixed(1)}m</p>
+                        <img src="../img/regla2.png" width="30">
+                        <p>${height.toFixed(1)}m</p>
                     </div>
                 </div>
+
                 <div>
-                    ${p.stats.map((stat: PokemonStat) => {
-                      const statKey = stat.stat.name as keyof typeof statMap;
-                      const statAbbr = statMap[statKey];
+                    ${pokemon.stats.map((stat) => {
+                      const key = stat.stat.name as keyof typeof statMap;
                       return `
                         <div class="stat">
-                            <p class="stat_name">${statAbbr}</p>
+                            <p class="stat_name">${statMap[key]}</p>
                             <p class="stat_value">${stat.base_stat}</p>
                             <div class="barra">
-                                <div class="progreso" style="width: ${Math.min(stat.base_stat, 100)}%;"></div>
+                                <div class="progreso" style="width:${Math.min(stat.base_stat, MAX_STAT_VALUE)}%;"></div>
                             </div>
                         </div>
                       `;
@@ -193,28 +162,47 @@ export async function initPokemonList(): Promise<void> {
       li.appendChild(a);
       pokemonListEl.appendChild(li);
 
-      const star: HTMLButtonElement | null = li.querySelector(".favorite_star");
-      if (star) {
-        star.addEventListener("click", (e: MouseEvent) => {
-          createDreamTeam(p);
-          
-          const isNowInTeam = !isInDreamTeamLocal;
-          star.classList.toggle("selected", isNowInTeam);
-          star.setAttribute("aria-label", isNowInTeam ? "Remove from Dream Team" : "Add to Dream Team");
-          star.title = isNowInTeam ? "Remove from Dream Team" : "Add to Dream Team";
-        });
-      }
+      const star = li.querySelector(".favorite_star") as HTMLButtonElement;
+
+      star.addEventListener("click", () => {
+        toggleDreamTeam(pokemon);
+        star.classList.toggle("selected");
+      });
     });
   }
 
-  function capitalize(str: string): string {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+  function showLoader(): void {
+    loader.style.display = "grid";
+    pokemonListEl.style.display = "none";
+    errorEl.style.display = "none";
+    noPokemonEl.style.display = "none";
   }
 
-  searchInput.addEventListener("input", (e: Event) => {
-    const target = e.target as HTMLInputElement;
-    const filtered: Pokemon[] = allPokemon.filter(p =>
-      p.name.toLowerCase().includes(target.value.toLowerCase())
+  function showError(): void {
+    errorEl.style.display = "flex";
+    pokemonListEl.style.display = "none";
+    loader.style.display = "none";
+    noPokemonEl.style.display = "none";
+  }
+
+  function showNoPokemon(): void {
+    noPokemonEl.style.display = "flex";
+    pokemonListEl.style.display = "none";
+    errorEl.style.display = "none";
+  }
+
+  function showPokemonList(): void {
+    pokemonListEl.style.display = "grid";
+    loader.style.display = "none";
+    errorEl.style.display = "none";
+    noPokemonEl.style.display = "none";
+  }
+
+  searchInput.addEventListener("input", (e) => {
+    const value = (e.target as HTMLInputElement).value;
+
+    const filtered = allPokemon.filter(p =>
+      p.name.toLowerCase().includes(value.toLowerCase())
     );
 
     if (filtered.length === 0) {
@@ -225,33 +213,25 @@ export async function initPokemonList(): Promise<void> {
     }
   });
 
-  function showError(): void {
-    if (errorEl) errorEl.style.display = "flex";
-    if (noPokemonEl) noPokemonEl.style.display = "none";
-    pokemonListEl.style.display = "none";
-    loader.style.display = "none";
-  }
+  try {
+    showLoader();
 
-  function showNoPokemon(): void {
-    if (errorEl) errorEl.style.display = "none";
-    if (noPokemonEl) noPokemonEl.style.display = "flex";
-    pokemonListEl.style.display = "none";
-  }
+    const data = await fetchPokemonList(POKEMON_LIMIT);
+    allPokemon = data;
 
-  function showPokemonList(): void {
-    if (errorEl) errorEl.style.display = "none";
-    if (noPokemonEl) noPokemonEl.style.display = "none";
-    pokemonListEl.style.display = "grid";
-  }
+    setTimeout(() => {
+      loader.style.display = "none";
+      showPokemonList();
+      renderPokemon(allPokemon);
+    }, LOADER_DELAY);
 
-  function showLoader(): void {
-    loader.style.display = "grid";
-    pokemonListEl.style.display = "none";
-    if (errorEl) errorEl.style.display = "none";
-    if (noPokemonEl) noPokemonEl.style.display = "none";
+  } catch {
+    showError();
   }
+}
 
-  await fetchPokemonList(70);
+function capitalize(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 initPokemonList().catch(console.error);
