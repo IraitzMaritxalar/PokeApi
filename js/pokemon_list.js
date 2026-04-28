@@ -165,18 +165,22 @@ function showPokemonList() {
 }
 async function initPokemonList() {
     const searchInput = document.querySelector(".pokemonSearch");
+    if (!searchInput)
+        return;
     let allPokemon = [];
-    searchInput.addEventListener("input", (e) => {
-        const value = e.target.value;
-        const filtered = allPokemon.filter(p => p.name.toLowerCase().includes(value.toLowerCase()));
-        if (filtered.length === 0) {
-            showNoPokemon();
-        }
-        else {
-            showPokemonList();
-            renderPokemon(filtered);
-        }
-    });
+    if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+            const value = e.target.value;
+            const filtered = allPokemon.filter(p => p.name.toLowerCase().includes(value.toLowerCase()));
+            if (filtered.length === 0) {
+                showNoPokemon();
+            }
+            else {
+                showPokemonList();
+                renderPokemon(filtered);
+            }
+        });
+    }
     try {
         showLoader();
         const data = await fetchPokemonList(POKEMON_LIMIT);
@@ -190,4 +194,6 @@ async function initPokemonList() {
         showError();
     }
 }
-initPokemonList().catch(console.error);
+if (typeof window !== "undefined") {
+    initPokemonList().catch(console.error);
+}
