@@ -1,25 +1,20 @@
 {
   "compilerOptions": {
-    // Entorno y características modernas
     "lib": ["ESNext", "DOM"],
     "target": "ESNext",
-    "module": "ESNext",
-
-    // Carpeta de origen y salida
+    "module": "commonjs",
     "rootDir": "./js",
     "outDir": "./dist",
-
-    // Estricto para TS
     "strict": true,
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-
-    // Flags opcionales menos estrictos
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false
+    "noPropertyAccessFromIndexSignature": false,
+    "esModuleInterop": true,
+    "types": ["jest"]
   },
-  "include": ["js/**/*.ts"]
+  "include": ["js/**/*.ts", "tests/**/*.ts"]
 }
