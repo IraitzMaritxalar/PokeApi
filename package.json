@@ -17,8 +17,9 @@
     "typescript": "^5"
   },
   "scripts": {
-    "dev": "concurrently \"bun tsc --watch\" \"bunx live-server --port=3000 --entry-file=html/index.html\"",
-    "test": "jest"
+    "dev": "concurrently \"tsc -w\" \"npx live-server --port=3000 --entry-file=html/index.html\"",
+    "test": "jest",
+    "build": "tsc -p tsconfig.app.json"
   },
   "version": "1.0.0",
   "description": "To install dependencies:",
